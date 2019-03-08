@@ -113,7 +113,8 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
  
 **Set up the client application: Android App**
 
-* Start **Android Studio** and create a **new project**.
+* Clone this repo.
+* Start **Android Studio** and **open project**.
 * In Android Studio under **Gradle Scripts/build.gradle (Module:app)**. Add 
 
 For App ID 
