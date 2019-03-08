@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">AI Treasure Hunt</string>
+    <string name="welcome">WELCOME</string>
+    <string name="login_now">Login Now</string>
+    <string name="click_to_login_using_google_or_facebook">Click to Login</string>
+    <string name="welcome_to_ai_treasure_hunt_game">Welcome to AI Treasure Hunt Game!</string>
+    <string name="welcome_to_ai_treasure_hunt">Welcome to AI Treasure Hunt!</string>
+    <string name="welcome_to_level_1">Welcome to Level 1</string>
+    <string name="this_game_has_5_levels_pass_all_the_levels_to_win_a_prize_lets_play_with_ai">This game has 5 levels. Pass all the levels to win a prize! Lets play with AI!</string>
+    <string name="hint">Hint</string>
+    <string name="todo">TODO</string>
+    <string name="start">Start</string>
+    <string name="level_2">level 2</string>
+    <string name="back">back</string>
+    <string name="level_1">level 1</string>
+    <string name="api_key">api key</string>
+
+
+</resources>
