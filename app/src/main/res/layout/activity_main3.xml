@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/page"
-    tools:context=".Main3Activity"
+    tools:context=".Level2"
     android:id="@+id/relativeLayout4">
 
     <android.support.v7.widget.Toolbar

@@ -1,14 +1,7 @@
 package com.abeer.ai_treasure_hunt;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-
-import android.os.Bundle;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,7 +24,7 @@ public class MainActivity extends Activity{
         button_text =((Button)View).getText().toString();
         if (button_text.equals("Start"))
         {
-            Intent mass = new Intent(MainActivity.this, Main2Activity.class);
+            Intent mass = new Intent(MainActivity.this, Level1.class);
             startActivity(mass);
 
         }

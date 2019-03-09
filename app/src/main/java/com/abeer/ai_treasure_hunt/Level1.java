@@ -4,16 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,45 +29,14 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Arrays;
 
 
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.ibm.watson.developer_cloud.android.library.camera.CameraHelper;
-import com.ibm.watson.developer_cloud.service.security.IamOptions;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages;
-import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Arrays;
 //level1
 
-public class Main2Activity extends AppCompatActivity {
+public class Level1 extends AppCompatActivity {
 
     private ImageView mImageView;
     private TextView mTextView;
@@ -83,7 +46,7 @@ public class Main2Activity extends AppCompatActivity {
     private VisualRecognition mVisualRecognition;
     private CameraHelper mCameraHelper;
     private File photoFile;
-    private static final String TAG = "Main2Activity";
+    private static final String TAG = "Level1";
     private String levelss;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +163,7 @@ public class Main2Activity extends AppCompatActivity {
                             if(finalName != null){
                                 if (finalName.equals("Trees"))
                                 {
-                                    Intent mass = new Intent(Main2Activity.this, Main3Activity.class);
+                                    Intent mass = new Intent(Level1.this, Level2.class);
                                     startActivity(mass);
                                 } else {
 
