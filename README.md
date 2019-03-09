@@ -83,7 +83,7 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
  
 4. Creating Visual Recognition Models 
 
-   - Click **Create a Class**. Give it a name. Create at least 2 classes. In this tutorial, "Trees" and "IBMlogo".
+   - Click **Create a Class**. Give it a name. Create at least 2 classes. In this tutorial, 5 classes: "Trees", "BurjKhalifa",   "BurjArab", "MiracleGarden", and "GlowGarden".
    - Upload the zip files for the dataset. **Upload to Project** > Browse > Choose folder.
    - Open the class you want to add the dataset to. Click on the uploaded zip folder on the right > **Add to Model**
 
@@ -159,7 +159,7 @@ Add the following permissions to the manifest file:
 
 **App ID Login**
 
-Add the following code in the Activity_Login to use App ID for authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
+The following code is added in the Activity_Login to use App ID for authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
 
 ```
     @Override
@@ -208,11 +208,11 @@ AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGIO
 
 ```
 
-#### In MainActivity:
+#### In all Level Activities:
 
 **Visual Recognition**
 
-* **onActivityResult** method, add the following code:
+* **onActivityResult** method, The following code is added:
 
 ```
 @Override
@@ -230,7 +230,7 @@ AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGIO
     }
 ```
 
-* In **backgroundThread** method, add the following code for making the network call, parsing the result and determining whether to start next activity (Level passed) or not (Level Failed). 
+* In **backgroundThread** method, the following code is added for making the network call, parsing the result and determining whether to start next activity (Level passed) or not (Level Failed). 
 
 ```
 private void backgroundThread(){
@@ -303,7 +303,7 @@ private void backgroundThread(){
     }
 ```
 
-In the above code, the name of the class should be edited in the following condition in the place of Trees.
+In the above code, the name of the class should be edited in the following condition in the place of Trees, depending on the names of classes you added in the visual recognition model.
 
 ```
  if(finalName.equals("Trees")){
@@ -331,7 +331,7 @@ ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
                         .build();
 ```
 
-Once you’ve followed the instructions above to get credentials, You're Done! Run the app. Play the Game!
+Once you’ve followed the instructions above to add credentials (Model ID, apikey and tenant ID), You're Done! Run the app. Play the Game!
 
 #### Architecture
 
