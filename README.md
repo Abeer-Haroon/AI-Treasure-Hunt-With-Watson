@@ -157,9 +157,40 @@ Add the following permissions to the manifest file:
     <uses-permission android:name="android.permission.CAMERA" />
 ```
 
+**Credentials**
+
+1. Add the tenant ID from App ID credentials in the following line of code in Activity_Login:
+
+```
+AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGION_US_SOUTH); 
+
+```
+
+2. Add the Credentials for Visual Recognition.
+
+   Edit the api key in strings.xml file 
+
+``` <string name="api_key">api key</string> ```
+
+
+3. Add the Model ID in the following line of code in all Level Activities(Level1, Level2, Level3, Level4 and Level5).
+                        
+```
+ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
+                        .imagesFile(imagesStream)
+                        .imagesFilename(photoFile.getName())
+                        .threshold((float) 0.6)
+                        .classifierIds(Arrays.asList("Model ID"))
+                        .build();
+```
+
+Once you’ve followed the instructions above to add credentials (Model ID, apikey and tenant ID), You're Done! Run the app. Play the Game!
+
+## Code
+
 **App ID Login**
 
-The following code is added in the Activity_Login to use App ID for authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
+The following code was added in the Activity_Login to implement App ID for user authentication. In this game, we're using this service to track the users of the game since it adds authentication method to the app.
 
 ```
     @Override
@@ -201,18 +232,10 @@ The following code is added in the Activity_Login to use App ID for authenticati
     }
 ```
 
-Add the tenant ID from App ID credentials in the following line in the code above:
-
-```
-AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGION_US_SOUTH); 
-
-```
-
-#### In all Level Activities:
 
 **Visual Recognition**
 
-* **onActivityResult** method, The following code is added:
+* In level activities, under **onActivityResult** method, The following code was added to implement visual recognition service:
 
 ```
 @Override
@@ -230,7 +253,7 @@ AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGIO
     }
 ```
 
-* In **backgroundThread** method, the following code is added for making the network call, parsing the result and determining whether to start next activity (Level passed) or not (Level Failed). 
+* In **backgroundThread** method, the following code was added for making the network call, parsing the result from visual recognition service to determine whether to start next activity (Level passed) or not (Level Failed). 
 
 ```
 private void backgroundThread(){
@@ -312,26 +335,6 @@ In the above code, the name of the class should be edited in the following condi
                         }
                         
 ```
-
-1. Add the Credentials for Visual Recognition.
-
-   Edit the api key in strings.xml file 
-
-``` <string name="api_key">api key</string> ```
-
-
-2. Add the Model ID in the code: (inside backgroundThread)
-                        
-```
-ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
-                        .imagesFile(imagesStream)
-                        .imagesFilename(photoFile.getName())
-                        .threshold((float) 0.6)
-                        .classifierIds(Arrays.asList("Model ID"))
-                        .build();
-```
-
-Once you’ve followed the instructions above to add credentials (Model ID, apikey and tenant ID), You're Done! Run the app. Play the Game!
 
 #### Architecture
 
