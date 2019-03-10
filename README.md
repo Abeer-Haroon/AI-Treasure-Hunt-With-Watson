@@ -402,7 +402,7 @@ In the above code, the name of the class should be edited in the following condi
 
 #### Architecture
 
- ![](Architecture.png) 
+ ![](https://github.com/Abeer-Haroon/AI-Treasure-Hunt-With-Watson/blob/master/images/ArchitectureDiagram.png) 
 
 ## Summary
 This tutorial introduced visual recognition models by showing how to build a fun treasure hunt game. You started by creating services on the IBM Cloud platform. Then you built the application on the client side and there you have it!
