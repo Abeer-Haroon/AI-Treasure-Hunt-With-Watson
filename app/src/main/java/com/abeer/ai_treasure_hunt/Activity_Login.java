@@ -19,8 +19,8 @@ import com.ibm.cloud.appid.android.api.tokens.RefreshToken;
 
 public class Activity_Login extends AppCompatActivity {
 
-    RelativeLayout rellay1, rellay2;
-   // private Activity activity;
+    RelativeLayout rellay1;
+
     private Button btn_login;
     private TextView tv_login;
     private TextView t_login;
@@ -30,7 +30,7 @@ public class Activity_Login extends AppCompatActivity {
         @Override
         public void run() {
             rellay1.setVisibility(View.VISIBLE);
-        //    rellay2.setVisibility(View.VISIBLE);
+
         }
     };
 
@@ -39,7 +39,7 @@ public class Activity_Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        AppID.getInstance().initialize(getApplicationContext(), "apikey", AppID.REGION_US_SOUTH);
+        AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGION_US_SOUTH);
 
 
 
@@ -52,6 +52,9 @@ public class Activity_Login extends AppCompatActivity {
         btn_login = (Button) findViewById(R.id.btn_login);
         tv_login = (TextView) findViewById(R.id.tv_login);
         t_login = (TextView) findViewById(R.id.t_login);
+
+
+        //When the button "login" is clicked, call the app ID service for authentication
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +84,7 @@ public class Activity_Login extends AppCompatActivity {
                     public void onAuthorizationSuccess (AccessToken accessToken, IdentityToken identityToken, RefreshToken refreshToken) {
                         //User authenticated
 
+                        //On successful authorization, start the next activity
                         Intent intent = new Intent(Activity_Login.this, MainActivity.class);
                         startActivity(intent);
                     }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/page"
+    android:background="@drawable/page1"
     tools:context=".Level2"
     android:id="@+id/relativeLayout4">
 

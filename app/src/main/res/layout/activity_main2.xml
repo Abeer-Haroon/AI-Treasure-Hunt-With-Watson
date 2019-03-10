@@ -4,7 +4,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@drawable/page"
+android:background="@drawable/page1"
 tools:context=".Level1"
 android:id="@+id/relativeLayout4">
 
@@ -34,7 +34,7 @@ android:id="@+id/relativeLayout4">
     android:id="@+id/btn_capture"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
+    android:background="@color/colorAccent"
     android:text="Capture"
     android:textColor="@color/browser_actions_bg_grey"
     android:visibility="visible"

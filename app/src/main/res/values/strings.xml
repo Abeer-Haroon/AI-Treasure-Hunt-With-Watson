@@ -13,7 +13,8 @@
     <string name="level_2">level 2</string>
     <string name="back">back</string>
     <string name="level_1">level 1</string>
-    <string name="api_key">api key</string>
+    <string name="api_key">edit here</string>
+    <string name="api_keyTTS">edit here</string>
 
 
 </resources>

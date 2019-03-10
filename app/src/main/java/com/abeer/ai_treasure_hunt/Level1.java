@@ -1,5 +1,6 @@
 package com.abeer.ai_treasure_hunt;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
 import com.ibm.watson.developer_cloud.android.library.camera.CameraHelper;
 import com.ibm.watson.developer_cloud.service.security.IamOptions;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.model.SynthesizeOptions;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyOptions;
@@ -43,15 +47,25 @@ public class Level1 extends AppCompatActivity {
     private TextView t_login;
     private Button btn_capture;
 
+
     private VisualRecognition mVisualRecognition;
     private CameraHelper mCameraHelper;
     private File photoFile;
     private static final String TAG = "Level1";
-    private String levelss;
+
+
+    //For Text-to-Speech service
+    private StreamPlayer player = new StreamPlayer();
+    private String speakLanguage;
+    private TextToSpeech textToSpeech;
+    private String hint = "Level 1. Find something that behaves like human at night. Mix Blue and yellow.";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -59,13 +73,15 @@ public class Level1 extends AppCompatActivity {
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-       // mImageView = (ImageView) findViewById(R.id.image_view_main);
+
         mTextView = (TextView) findViewById(R.id.text_view_main);
         t_login = (TextView) findViewById(R.id.t_login);
         mCameraHelper = new CameraHelper(this);
 
         btn_capture = findViewById(R.id.btn_capture);
         auth();
+
+        speakhint();
 
         captureImage();
 
@@ -112,6 +128,37 @@ public class Level1 extends AppCompatActivity {
         }
     }
 
+    //For text to speech service
+
+    public void speakhint() {
+        IamOptions options = new IamOptions.Builder()
+                .apiKey(getString(R.string.api_keyTTS))
+                .build();
+
+        textToSpeech = new TextToSpeech(options);
+
+
+        //Add the url from service credentials
+        textToSpeech.setEndPoint("add url here");
+
+        new SynthesisTask().execute(hint);
+
+    }
+
+    //For text to speech service
+    private class SynthesisTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
+                    .text(params[0])
+                    .voice(speakLanguage)
+                    .accept(SynthesizeOptions.Accept.AUDIO_WAV)
+                    .build();
+            player.playStream(textToSpeech.synthesize(synthesizeOptions).execute());
+            return "Did synthesize";
+        }
+    }
+
     private void backgroundThread(){
 
         AsyncTask.execute(new Runnable() {
@@ -128,7 +175,7 @@ public class Level1 extends AppCompatActivity {
                             .imagesFile(imagesStream)
                             .imagesFilename(photoFile.getName())
                             .threshold((float) 0.6)
-                            .classifierIds(Arrays.asList("ModelNumber"))
+                            .classifierIds(Arrays.asList("Model Number"))
                             .build();
                     ClassifiedImages result = mVisualRecognition.classify(classifyOptions).execute();
                     Gson gson = new Gson();
@@ -150,23 +197,29 @@ public class Level1 extends AppCompatActivity {
                     }
                     final String finalName = name;
 
+                    final MediaPlayer mp = MediaPlayer.create(Level1.this,R.raw.fail);
 
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                          //  mTextView.setText("Detected Image: " + finalName);
+
+
 
                             t_login.setVisibility(View.GONE);
                             Log.d(TAG, "Ans: " + finalName);
 
                             if(finalName != null){
+
+                                //if the class returned is Trees, go to the next level
                                 if (finalName.equals("Trees"))
                                 {
                                     Intent mass = new Intent(Level1.this, Level2.class);
                                     startActivity(mass);
                                 } else {
 
+
+                                    mp.start(); //play the audio for failing the level
                                     Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
                                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                                     toast.show();
@@ -177,6 +230,8 @@ public class Level1 extends AppCompatActivity {
 
                             else
                             {
+
+                                mp.start();
                                 Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
@@ -190,7 +245,7 @@ public class Level1 extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("reached here in catch block");
+
 
 
                 }

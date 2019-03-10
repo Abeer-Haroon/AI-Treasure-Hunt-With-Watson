@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@drawable/page"
+    android:background="@drawable/page1"
     tools:context="com.abeer.ai_treasure_hunt.Activity_Login">
 
     <RelativeLayout

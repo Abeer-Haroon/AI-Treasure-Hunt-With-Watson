@@ -1,5 +1,6 @@
 package com.abeer.ai_treasure_hunt;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -17,8 +18,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
 import com.ibm.watson.developer_cloud.android.library.camera.CameraHelper;
 import com.ibm.watson.developer_cloud.service.security.IamOptions;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
+import com.ibm.watson.developer_cloud.text_to_speech.v1.model.SynthesizeOptions;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifiedImages;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyOptions;
@@ -34,6 +38,8 @@ import java.util.Arrays;
 
 
 import android.widget.Toast;
+
+import static java.lang.Thread.sleep;
 //level1
 
 public class Level2 extends AppCompatActivity {
@@ -42,6 +48,11 @@ public class Level2 extends AppCompatActivity {
     private TextView mTextView;
     private TextView t_login;
     private Button btn_capture;
+    private String hint = "Level 2. Find something with 163 floors";
+
+    private StreamPlayer player = new StreamPlayer();
+    private String speakLanguage;
+    private TextToSpeech textToSpeech;
 
     private VisualRecognition mVisualRecognition;
     private CameraHelper mCameraHelper;
@@ -52,6 +63,7 @@ public class Level2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        final MediaPlayer mp = MediaPlayer.create(this,R.raw.pass);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,11 +75,20 @@ public class Level2 extends AppCompatActivity {
         t_login = (TextView) findViewById(R.id.t_login);
         mCameraHelper = new CameraHelper(this);
 
+        mp.start();
+        try {
+            sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         Toast toast = Toast.makeText(getApplicationContext(), "Congrats for passing level 1!", Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
         btn_capture = findViewById(R.id.btn_capture);
         auth();
+        speakhint();
+
 
         captureImage();
 
@@ -83,7 +104,30 @@ public class Level2 extends AppCompatActivity {
                 .build();
         mVisualRecognition = new VisualRecognition("2018-03-19", options);
     }
+    public void speakhint() {
+        IamOptions options = new IamOptions.Builder()
+                .apiKey(getString(R.string.api_keyTTS))
+                .build();
 
+        textToSpeech = new TextToSpeech(options);
+
+        textToSpeech.setEndPoint("add url here");
+
+        new Level2.SynthesisTask().execute(hint);
+
+    }
+    private class SynthesisTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
+                    .text(params[0])
+                    .voice(speakLanguage)
+                    .accept(SynthesizeOptions.Accept.AUDIO_WAV)
+                    .build();
+            player.playStream(textToSpeech.synthesize(synthesizeOptions).execute());
+            return "Did synthesize";
+        }
+    }
     public void captureImage(){
 
         Button button = (Button) findViewById(R.id.btn_capture);
@@ -155,6 +199,8 @@ public class Level2 extends AppCompatActivity {
                     }
                     final String finalName = name;
 
+                    final MediaPlayer fmp = MediaPlayer.create(Level2.this,R.raw.fail);
+
 
 
                     runOnUiThread(new Runnable() {
@@ -171,6 +217,7 @@ public class Level2 extends AppCompatActivity {
                                     Intent mass = new Intent(Level2.this, Level3.class);
                                     startActivity(mass);
                                 } else {
+                                    fmp.start();
 
                                     Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
                                     toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
@@ -182,6 +229,7 @@ public class Level2 extends AppCompatActivity {
 
                             else
                             {
+                                fmp.start();
                                 Toast toast = Toast.makeText(getApplicationContext(), "Sorry. Try Again!", Toast.LENGTH_LONG);
                                 toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
                                 toast.show();
@@ -195,7 +243,7 @@ public class Level2 extends AppCompatActivity {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("reached here in catch block");
+
 
 
                 }
