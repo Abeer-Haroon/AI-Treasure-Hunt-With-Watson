@@ -1,7 +1,7 @@
 # AI Treasure Hunt Game With Watson
 
 ## Learning Objectives
-Android Game using IBM Watson Visual Recognition service. This is a Treasure Hunt Game, in which the player will be given the hints to find something and take a photo of it to pass a level. To determine if the player passes the level, custom visual recognition models are built in Watson Studio with datasets of images. This is integrated within the application. The models are trained with Watson Studio. Furthermore, App ID service is used to add authentication to the game, to track players of the game.
+Android Game using IBM Watson Visual Recognition service, Text-to-Speech Service and App ID Service. This is a Treasure Hunt Game, in which the player will be given the hints to find something and take a photo of it to pass a level.  To give the hints, Text-to-Speech Service is used. To determine if the player passes the level, custom visual recognition models are built in Watson Studio with datasets of images. This is integrated within the application. The models are trained with Watson Studio. Furthermore, App ID service is used to add authentication to the game, to track players of the game.
 
 ## Demo
 
@@ -62,8 +62,14 @@ First you set up the services on IBM Cloud. Then you set up the client applicati
    - Copy the `apikey` value, or copy the `username` and `password` values if your service instance doesn’t provide an `apikey`.
    - Copy the `url` value.
    
+3. Create an instance of the App ID service and get your credentials:
+   - Go to the [Text-to-Speech](https://cloud.ibm.com/catalog/services/text-to-speech) page in the IBM Cloud Catalog.
+   - Click **Create**.
+   - Click **Service Credentials** > New Credentials > Add
+   - Copy the `apikey` value, or copy the `username` and `password` values if your service instance doesn’t provide an `apikey`.
+   - Copy the `url` value.
    
-3. Create an instance of the Watson Studio
+4. Create an instance of the Watson Studio
    - Go to the [Watson Studio](https://cloud.ibm.com/catalog/services/watson-studio?bss_account=e366b6e4fb004c5eaccfbe7042b670a4) page in the IBM Cloud Catalog.
    - Click **Create**.
 
@@ -172,8 +178,32 @@ AppID.getInstance().initialize(getApplicationContext(), "tenant id", AppID.REGIO
 
 ``` <string name="api_key">api key</string> ```
 
+3. Add the Credentials for Text-to-Speech.
 
-3. Add the Model ID in the following line of code in all Level Activities(Level1, Level2, Level3, Level4 and Level5).
+   Edit the api key in strings.xml file 
+
+``` <string name="api_keyTTS">api key for text to speech</string> ```
+
+   Add the url in the code below from service credentials (for all Level Activities under **speakhint** ):
+   
+```
+     public void speakhint() {
+        IamOptions options = new IamOptions.Builder()
+                .apiKey(getString(R.string.api_keyTTS))
+                .build();
+
+        textToSpeech = new TextToSpeech(options);
+
+
+        //Add the url from service credentials
+        textToSpeech.setEndPoint("add url here");
+
+        new SynthesisTask().execute(hint);
+```
+
+
+
+4. Add the Model ID in the following line of code in all Level Activities(Level1, Level2, Level3, Level4 and Level5).
                         
 ```
 ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
@@ -184,7 +214,7 @@ ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
                         .build();
 ```
 
-Once you’ve followed the instructions above to add credentials (Model ID, apikey and tenant ID), You're Done! Run the app. Play the Game!
+Once you’ve followed the instructions above to add credentials (Model ID, api keys and tenant ID), You're Done! Run the app. Play the Game!
 
 ## Code
 
@@ -334,6 +364,40 @@ In the above code, the name of the class should be edited in the following condi
                             startActivity(mass);
                         }
                         
+```
+**Text-to-Speech**
+
+* In level activities, the following code was added to implement Text-to-Speech service:
+
+```
+ public void speakhint() {
+        IamOptions options = new IamOptions.Builder()
+                .apiKey(getString(R.string.api_keyTTS))
+                .build();
+
+        textToSpeech = new TextToSpeech(options);
+
+
+        //Add the url from service credentials
+        textToSpeech.setEndPoint("add url here");
+
+        new SynthesisTask().execute(hint);
+
+    }
+    
+ private class SynthesisTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
+                    .text(params[0])
+                    .voice(speakLanguage)
+                    .accept(SynthesizeOptions.Accept.AUDIO_WAV)
+                    .build();
+            player.playStream(textToSpeech.synthesize(synthesizeOptions).execute());
+            return "Did synthesize";
+        }
+    }
+
 ```
 
 #### Architecture
